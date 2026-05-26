@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Spam Detector</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+}
+
+.card {
+    background: white;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 2.5em;
+}
+
+.subtitle {
+    color: #666;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 1em;
+    font-family: Arial, sans-serif;
+    resize: vertical;
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.btn-predict {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-predict:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-predict:active {
+    transform: translateY(0);
+}
+
+.result {
+    margin-top: 30px;
+}
+
+.result.hidden {
+    display: none;
+}
+
+.result-box {
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    animation: slideIn 0.5s ease;
+}
+
+.result-box.spam {
+    background-color: #fee;
+    border-left: 5px solid #e74c3c;
+}
+
+.result-box.ham {
+    background-color: #efe;
+    border-left: 5px solid #27ae60;
+}
+
+.result-box h2 {
+    margin-bottom: 10px;
+    font-size: 1.8em;
+}
+
+.result-box.spam h2 {
+    color: #c0392b;
+}
+
+.result-box.ham h2 {
+    color: #229954;
+}
+
+.result-box p {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.result-box.spam p {
+    color: #c0392b;
+}
+
+.result-box.ham p {
+    color: #229954;
+}
+
+.loading {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.2em;
+    color: #667eea;
+    animation: pulse 1.5s infinite;
+}
+
+.loading.hidden {
+    display: none;
+}
+
+.error {
+    background-color: #fee;
+    color: #c0392b;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.error.hidden {
+    display: none;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@media (max-width: 600px) {
+    .card {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 2em;
+    }
+    
+    textarea {
+        font-size: 16px;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>📧 Email Spam Detector</h1>
+            <p class="subtitle">Check if your email is spam or legitimate</p>
+            
+            <form id="emailForm">
+                <textarea 
+                    id="emailText" 
+                    placeholder="Paste your email message here..." 
+                    rows="8"
+                    required
+                ></textarea>
+                
+                <button type="submit" class="btn-predict">🔍 Check Email</button>
+            </form>
+            
+            <div id="result" class="result hidden">
+                <div id="resultBox" class="result-box">
+                    <h2 id="resultTitle"></h2>
+                    <p id="resultConfidence"></p>
+                </div>
+            </div>
+            
+            <div id="loading" class="loading hidden">
+                <p>Analyzing email...</p>
+            </div>
+            
+            <div id="error" class="error hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('emailForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const emailText = document.getElementById('emailText').value;
+            const loadingDiv = document.getElementById('loading');
+            const resultDiv = document.getElementById('result');
+            const errorDiv = document.getElementById('error');
+            
+            loadingDiv.classList.remove('hidden');
+            resultDiv.classList.add('hidden');
+            errorDiv.classList.add('hidden');
+            
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: emailText })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const resultBox = document.getElementById('resultBox');
+                    const isSpam = data.result === 'SPAM';
+                    
+                    resultBox.className = 'result-box ' + (isSpam ? 'spam' : 'ham');
+                    document.getElementById('resultTitle').textContent = 
+                        isSpam ? '🚨 SPAM DETECTED' : '✅ LEGITIMATE EMAIL';
+                    document.getElementById('resultConfidence').textContent = 
+                        `Confidence: ${data.confidence}`;
+                    
+                    loadingDiv.classList.add('hidden');
+                    resultDiv.classList.remove('hidden');
+                } else {
+                    throw new Error(data.error || 'Error predicting');
+                }
+            } catch (error) {
+                loadingDiv.classList.add('hidden');
+                errorDiv.textContent = '❌ Error: ' + error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
