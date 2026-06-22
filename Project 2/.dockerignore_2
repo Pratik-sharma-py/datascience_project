@@ -1,0 +1,15 @@
+data/
+notebooks/
+models/
+logs/
+reports/
+src/
+tests/
+deploy/
+__pycache__/
+*.pyc
+*.ipynb
+.git/
+.gitignore
+.venv/
+venv/
