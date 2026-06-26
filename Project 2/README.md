@@ -1,10 +1,10 @@
-# 🎬 Movie Recommendation System
+# Movie Recommendation System
 
 A Netflix-style movie recommender built with **collaborative filtering** and **matrix factorization** on the MovieLens dataset. It learns each user's taste from rating patterns, predicts how a user would rate movies they haven't seen, and serves recommendations through a deployable Streamlit web app.
 
 ---
 
-## 📖 Overview
+## Overview
 
 The system answers one core question:
 
@@ -29,7 +29,7 @@ Both are powered by a single trained matrix-factorization model.
 
 ---
 
-## 📊 Dataset
+## Dataset
 
 [MovieLens](https://grouplens.org/datasets/movielens/) — the standard benchmark dataset for recommender systems, from the GroupLens research group.
 
@@ -42,7 +42,7 @@ Both are powered by a single trained matrix-factorization model.
 
 ---
 
-## 🧠 Methodology
+## Methodology
 
 ### Collaborative filtering
 The system uses **collaborative filtering** — it learns purely from rating patterns ("users who rated these movies this way also rated those movies that way"), without needing to understand a movie's content.
@@ -81,11 +81,11 @@ The comparison produces a leaderboard. **Replace these with your own run's numbe
 
 | Algorithm | Family | RMSE | MAE |
 |-----------|--------|------|-----|
-| SVD | Matrix factorization | _your value_ | _your value_ |
-| NMF | Matrix factorization | _your value_ | _your value_ |
-| KNN user-based | Neighborhood | _your value_ | _your value_ |
-| KNN item-based | Neighborhood | _your value_ | _your value_ |
-| Random baseline | Baseline | _your value_ | _your value_ |
+| SVD | Matrix factorization | 0.8074 | 0.6172 |
+| NMF | Matrix factorization | 0.8589  | 0.6610|
+| KNN user-based | Neighborhood | 0.8693 | 0.6738 |
+| KNN item-based | Neighborhood | 0.8364 |0.6398 |
+| Random baseline | Baseline | 1.4184|1.1302|
 
 The matrix-factorization models lead; the random baseline is clearly worst, confirming the models learned real signal. The best matrix-factorization model is retrained on all data and used for serving.
 
@@ -127,7 +127,7 @@ Project 2/
 
 ---
 
-## ⚙️ Installation
+## Installation
 
 Requires Python 3.10+.
 
@@ -139,7 +139,7 @@ Key libraries: `scikit-surprise`, `pandas`, `numpy`, `scikit-learn`, `matplotlib
 
 ---
 
-## 🚀 How to run
+##  How to run
 
 ### 1. Explore the data
 Open `notebooks/eda.ipynb` and run it to understand the dataset.
@@ -206,7 +206,7 @@ docker run -p 8501:8501 movie-recommender
 
 ---
 
-## 🔮 Future work
+##  Future work
 
 - Add **content features** (genres, release year) for a **hybrid** model to ease cold-start.
 - Try **SVD++** for a small accuracy gain.
@@ -217,7 +217,7 @@ docker run -p 8501:8501 movie-recommender
 
 ---
 
-## 🛠️ Tech stack
+##  Tech stack
 
 `Python` · `pandas` · `NumPy` · `scikit-surprise` · `scikit-learn` · `matplotlib` · `Streamlit` · `Docker`
 
