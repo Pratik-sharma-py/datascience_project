@@ -4,4 +4,4 @@ scikit-learn
 matplotlib
 streamlit
 seaborn
-scikit-learn
+scikit-suprise
