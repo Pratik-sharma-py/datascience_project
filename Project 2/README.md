@@ -19,7 +19,7 @@ Both are powered by a single trained matrix-factorization model.
 
 ---
 
-## ✅ What this project does
+## What this project does
 
 - **EDA** (`notebooks/eda.ipynb`) — explores the dataset: sparsity, rating distribution, the popularity long-tail, genres, rater behaviour, and release-year trends.
 - **Modeling pipeline** (`notebooks/netflix_recommendation.ipynb`) — loads and cleans the data, compares five algorithms on the same test set, trains a final matrix-factorization model on all data, and builds both recommendation features.
@@ -75,7 +75,7 @@ Models train on 80% of the ratings and are scored on the unseen 20%, so scores r
 
 ---
 
-## 🏆 Results
+##  Results
 
 The comparison produces a leaderboard. **Replace these with your own run's numbers** — exact values depend on the sample size and filtering settings.
 
@@ -106,7 +106,7 @@ Project 2/
 │   └── netflix_recommendation.ipynb  # main pipeline: clean → compare → train → recommend → export
 ├── src/                              # source modules (placeholder)
 ├── tests/
-│   └── test_preprocess.py            # preprocessing test
+│ 
 ├── models/                           # saved models (placeholder)
 ├── logs/                             # logs (placeholder)
 ├── reports/
@@ -167,7 +167,7 @@ The app opens at `http://localhost:8501` with two tabs: **Similar to a movie** a
 
 ---
 
-## 🌐 Deployment
+## Deployment
 
 The app loads only the exported model numbers (a few small matrices) and reconstructs predictions in NumPy, so it needs no training library and is light enough to host for free.
 
@@ -185,7 +185,7 @@ docker run -p 8501:8501 movie-recommender
 
 ---
 
-## 🔧 How it works (under the hood)
+##  How it works (under the hood)
 
 1. **Load & clean** — read ratings with small dtypes; filter out users/movies with too few ratings.
 2. **Split** — hold out 20% of ratings as a test set for honest evaluation.
@@ -198,7 +198,7 @@ docker run -p 8501:8501 movie-recommender
 
 ---
 
-## ⚠️ Limitations
+##  Limitations
 
 - **Cold start** — cannot recommend for brand-new users or movies with no ratings yet.
 - **Popularity bias** — like most collaborative filtering, it tends to favor popular titles.
@@ -221,7 +221,7 @@ docker run -p 8501:8501 movie-recommender
 
 `Python` · `pandas` · `NumPy` · `scikit-surprise` · `scikit-learn` · `matplotlib` · `Streamlit` · `Docker`
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - [MovieLens / GroupLens](https://grouplens.org/datasets/movielens/) for the dataset.
 - The [Surprise](https://surpriselib.com/) library for the recommendation algorithms.
